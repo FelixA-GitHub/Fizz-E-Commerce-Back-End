@@ -4,7 +4,9 @@ const { Tag, Product, ProductTag } = require('../../models');
 // The `/api/tags` endpoint
 
 router.get('/', (req, res) => {
+  console.log('======================');
   // find all tags
+  
   // be sure to include its associated Product data
 });
 
