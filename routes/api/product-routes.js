@@ -6,100 +6,110 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   console.log('======================');
+
+  Product.findAll({include:[Category, Tag]}).then(data  => {res.json(data)})
   // find all products
-  Product.findAll({
-    attributes: [
-      'id',
-      'product_name',
-      'price',
-      'stock',
-      'category_id'
-    ],
-    // be sure to include its associated Category and Tag data
-    include: [
-      {
-        model: Category,
-        attributes: ['id', 'category_name'],
-        include: {
-          model: Tag,
-          attributes: ['id', 'tag_name']
-        }
-      },
-      {
-        model: Tag,
-        attributes: ['id', 'tag_name']
-      }
-    ]
-  })
-    .then(dbProductData => {
-      if (!dbProductData) {
-        res.status(404).json({ message: 'No product found with this id' });
-        return;
-      }
-      res.json(dbProductData);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+//   Product.findAll({
+//     attributes: [
+//       'id',
+//       'product_name',
+//       'price',
+//       'stock',
+//       'category_id'
+//     ],
+//     // be sure to include its associated Category and Tag data
+//     include: [
+//       {
+//         model: Category,
+//         attributes: ['id', 'category_name'],
+//         include: {
+//           model: Tag,
+//           attributes: ['id', 'tag_name']
+//         }
+//       },
+//       {
+//         model: Tag,
+//         attributes: ['id', 'tag_name']
+//       }
+//     ]
+//   })
+//     .then(dbProductData => {
+//       if (!dbProductData) {
+//         res.status(404).json({ message: 'No product found with this id' });
+//         return;
+//       }
+//       res.json(dbProductData);
+//     })
+//     .catch(err => {
+//       console.log(err);
+//       res.status(500).json(err);
+//     });
 });
 
 // get one product
 router.get('/:id', (req, res) => {
+
+  Product.findOne({where: {id: req.params.id}, include: [Category, Tag]}).then(data => res.json(data))
   // find a single product by its `id`
-  Product.findOne({
-    where: {
-      id: req.params.id
-    },
-    attributes: [
-      'id',
-      'product_name',
-      'price',
-      'stock',
-      'category_id'
-    ],
-    // be sure to include its associated Category and Tag data
-    include: [
-      {
-        model: Category,
-        attributes: ['id', 'category_name'],
-        include: {
-          model: Tag,
-          attributes: ['id', 'tag_name']
-        }
-      },
-      {
-        model: Tag,
-        attributes: ['id', 'tag_name']
-      }
-    ]
-  })
-    .then(dbProductData => {
-      if (!dbProductData) {
-        res.status(404).json({ message: 'No product found with this id' });
-        return;
-      }
-      res.json(dbProductData);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  // Product.findOne({
+  //   where: {
+  //     id: req.params.id
+  //   },
+  //   attributes: [
+  //     'id',
+  //     'product_name',
+  //     'price',
+  //     'stock',
+  //     'category_id'
+  //   ],
+  //   // be sure to include its associated Category and Tag data
+  //   include: [
+  //     {
+  //       model: Category,
+  //       attributes: ['id', 'category_name'],
+  //       include: {
+  //         model: Tag,
+  //         attributes: ['id', 'tag_name']
+  //       }
+  //     },
+  //     {
+  //       model: Tag,
+  //       attributes: ['id', 'tag_name']
+  //     }
+  //   ]
+  // })
+  //   .then(dbProductData => {
+  //     if (!dbProductData) {
+  //       res.status(404).json({ message: 'No product found with this id' });
+  //       return;
+  //     }
+  //     res.json(dbProductData);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     res.status(500).json(err);
+  //   });
 });
 
 // create new product
 router.post('/', (req, res) => {
+
+    // Product.create({values: {product_name: req.body.product_name, price: req.body.price, stock: req.body.stock, tagIds: req.body.tag_id}}).then(data => {
+    //   if(req.body.tagIds.length){
+
+    //   }
+    // })
   Product.create(
     //req.body should look like this...
     {
       product_name: req.body.product_name,
       price: req.body.price,
       stock: req.body.stock,
-      tagIds: req.body.tag_id
+      category_id: req.body.category_id
     })
 
     .then((product) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
+      
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
@@ -127,9 +137,9 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     },
   })
-    .then((product) => {
+    .then(() => {
       // find all associated tags from ProductTag
-      return ProductTag.findAll({ where: { product_id: req.params.id } }), product;
+      return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
     .then((productTags) => {
       // get list of current tag_ids
