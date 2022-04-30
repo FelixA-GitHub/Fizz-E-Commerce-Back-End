@@ -6,9 +6,9 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   console.log('======================');
-
-  Product.findAll({include:[Category, Tag]}).then(data  => {res.json(data)})
   // find all products
+  Product.findAll({include:[Category, Tag]}).then(data  => {res.json(data)})
+  // below is expanded version of Product.findAll()
 //   Product.findAll({
 //     attributes: [
 //       'id',
@@ -48,9 +48,9 @@ router.get('/', (req, res) => {
 
 // get one product
 router.get('/:id', (req, res) => {
-
-  Product.findOne({where: {id: req.params.id}, include: [Category, Tag]}).then(data => res.json(data))
   // find a single product by its `id`
+  Product.findOne({where: {id: req.params.id}, include: [Category, Tag]}).then(data => res.json(data))
+  //// below is expanded version of Product.findOne()
   // Product.findOne({
   //   where: {
   //     id: req.params.id
@@ -93,12 +93,7 @@ router.get('/:id', (req, res) => {
 
 // create new product
 router.post('/', (req, res) => {
-
-    // Product.create({values: {product_name: req.body.product_name, price: req.body.price, stock: req.body.stock, tagIds: req.body.tag_id}}).then(data => {
-    //   if(req.body.tagIds.length){
-
-    //   }
-    // })
+  //post new product
   Product.create(
     //req.body should look like this...
     {
