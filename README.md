@@ -30,18 +30,16 @@
 - Express
 ```
 
-## Mock Up
-
-### GET All Categories, Products, Tags
-
-### GET a Single Category, Product, Tag
-
-### POST a Category, Product, Tag
-
-### PUT into Category, Product, Tag
-
-### DELETE Category, Product, Tag
-
 ## Walkthrough
 
-## Contact Me
+https://watch.screencastify.com/v/IHmJwKGaOrKkWfO4aNBF
+
+## Questions
+
+GitHub:
+
+https://github.com/FelixA-GitHub
+
+If you have additional questions, you can reach me at:
+
+elmalogato@hotmail.com
