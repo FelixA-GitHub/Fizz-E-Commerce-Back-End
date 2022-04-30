@@ -7,49 +7,49 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', (req, res) => {
   console.log('======================');
   // find all products
-  Product.findAll({include:[Category, Tag]}).then(data  => {res.json(data)})
+  Product.findAll({ include: [Category, Tag] }).then(data => { res.json(data) })
   // below is expanded version of Product.findAll()
-//   Product.findAll({
-//     attributes: [
-//       'id',
-//       'product_name',
-//       'price',
-//       'stock',
-//       'category_id'
-//     ],
-//     // be sure to include its associated Category and Tag data
-//     include: [
-//       {
-//         model: Category,
-//         attributes: ['id', 'category_name'],
-//         include: {
-//           model: Tag,
-//           attributes: ['id', 'tag_name']
-//         }
-//       },
-//       {
-//         model: Tag,
-//         attributes: ['id', 'tag_name']
-//       }
-//     ]
-//   })
-//     .then(dbProductData => {
-//       if (!dbProductData) {
-//         res.status(404).json({ message: 'No product found with this id' });
-//         return;
-//       }
-//       res.json(dbProductData);
-//     })
-//     .catch(err => {
-//       console.log(err);
-//       res.status(500).json(err);
-//     });
+  //   Product.findAll({
+  //     attributes: [
+  //       'id',
+  //       'product_name',
+  //       'price',
+  //       'stock',
+  //       'category_id'
+  //     ],
+  //     // be sure to include its associated Category and Tag data
+  //     include: [
+  //       {
+  //         model: Category,
+  //         attributes: ['id', 'category_name'],
+  //         include: {
+  //           model: Tag,
+  //           attributes: ['id', 'tag_name']
+  //         }
+  //       },
+  //       {
+  //         model: Tag,
+  //         attributes: ['id', 'tag_name']
+  //       }
+  //     ]
+  //   })
+  //     .then(dbProductData => {
+  //       if (!dbProductData) {
+  //         res.status(404).json({ message: 'No product found with this id' });
+  //         return;
+  //       }
+  //       res.json(dbProductData);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       res.status(500).json(err);
+  //     });
 });
 
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
-  Product.findOne({where: {id: req.params.id}, include: [Category, Tag]}).then(data => res.json(data))
+  Product.findOne({ where: { id: req.params.id }, include: [Category, Tag] }).then(data => res.json(data))
   //// below is expanded version of Product.findOne()
   // Product.findOne({
   //   where: {
@@ -104,7 +104,7 @@ router.post('/', (req, res) => {
     })
 
     .then((product) => {
-      
+
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
